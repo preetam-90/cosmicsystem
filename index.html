@@ -1,26 +1,1951 @@
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>cosmic-scroll-spectacle</title>
-    <meta name="description" content="Lovable Generated Project" />
-    <meta name="author" content="Lovable" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cosmic Scroll Spectacle</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --deep-space: #070B24;
+      --nebula-pink: #FF5DAA;
+      --nebula-purple: #9E7CFF;
+      --star-color: #FFFFFF;
+      --text-primary: #F8F9FA;
+      --text-secondary: #CED8E0;
+      --accent-blue: #41C9FF;
+      --accent-teal: #33E8BD;
+      --ui-bg: rgba(13, 17, 38, 0.8);
+      --ui-border: rgba(65, 201, 255, 0.3);
+      --sun-color: #FF9D00;
+      --mercury-color: #A5A9AD;
+      --venus-color: #F2C091;
+      --earth-color: #6B93D6;
+      --mars-color: #E67F5C;
+      --jupiter-color: #E0B589;
+      --saturn-color: #F4EBD3;
+      --uranus-color: #CAF0F8;
+      --neptune-color: #4361EE;
+    }
 
-    <meta property="og:title" content="cosmic-scroll-spectacle" />
-    <meta property="og:description" content="Lovable Generated Project" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background-color: var(--deep-space);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      overscroll-behavior: none;
+    }
 
+    h1, h2, h3, h4, .nav-link {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    section {
+      position: relative;
+      min-height: 100vh;
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .space-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: radial-gradient(2px 2px at 20px 30px, var(--star-color), rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 40px 70px, var(--star-color), rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 50px 160px, var(--star-color), rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 90px 40px, var(--star-color), rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 130px 80px, var(--star-color), rgba(0,0,0,0)),
+                        radial-gradient(2px 2px at 160px 120px, var(--star-color), rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: twinkle 4s infinite;
+    }
+
+    .stars:nth-child(2) {
+      background-size: 300px 300px;
+      animation-delay: -1s;
+      opacity: 0.6;
+    }
+
+    .stars:nth-child(3) {
+      background-size: 400px 400px;
+      animation-delay: -2s;
+      opacity: 0.4;
+    }
+
+    .nebula {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at 25% 25%, rgba(158, 124, 255, 0.2) 0%, rgba(0, 0, 0, 0) 50%), 
+                  radial-gradient(ellipse at 75% 75%, rgba(255, 93, 170, 0.2) 0%, rgba(0, 0, 0, 0) 50%);
+      opacity: 0.6;
+      filter: blur(40px);
+      animation: nebula-drift 30s ease infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    @keyframes nebula-drift {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(3%, -2%) scale(1.05); }
+      100% { transform: translate(-3%, 2%) scale(0.95); }
+    }
+
+    /* Navigation */
+    .navigation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      justify-content: center;
+      z-index: 100;
+      transition: all 0.5s ease;
+      backdrop-filter: blur(8px);
+      background: rgba(7, 11, 36, 0.7);
+      border-bottom: 1px solid var(--ui-border);
+    }
+
+    .nav-list {
+      display: flex;
+      list-style: none;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .nav-item {
+      position: relative;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-indicator {
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      height: 3px;
+      width: 80%;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+      border-radius: 1px;
+      transition: transform 0.3s ease;
+    }
+
+    .nav-link.active {
+      color: var(--text-primary);
+    }
+
+    .nav-link.active + .nav-indicator {
+      transform: translateX(-50%) scaleX(1);
+    }
+
+    .planet-icon {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    /* Introduction Section */
+    .intro {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+      gap: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fade-in 1.5s ease forwards;
+    }
+
+    .intro h1 {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      line-height: 1;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, var(--accent-blue), var(--nebula-pink));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: text-reveal 1.5s ease 0.5s forwards;
+    }
+
+    .intro p {
+      max-width: 800px;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: text-reveal 1.5s ease 1s forwards;
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      animation: fade-in 1s ease 2s forwards;
+    }
+
+    .scroll-indicator span {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scroll-arrow {
+      width: 30px;
+      height: 30px;
+      border: 2px solid var(--text-secondary);
+      border-radius: 50%;
+      position: relative;
+      animation: bounce 2s infinite;
+    }
+
+    .scroll-arrow::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid var(--text-secondary);
+      border-bottom: 2px solid var(--text-secondary);
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    /* Orbital Simulation */
+    .orbital-simulation {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      height: 500px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: scale(0.95);
+      animation: fade-scale-in 1.5s ease forwards 0.5s;
+    }
+
+    .orbital-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .sun {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle at 30% 30%, 
+                                 #FFF176 0%, 
+                                 #FFD54F 25%, 
+                                 #FF9800 50%, 
+                                 #FF5722 75%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 30px rgba(255, 157, 0, 0.8);
+      animation: sun-pulse 4s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes sun-pulse {
+      0%, 100% { box-shadow: 0 0 30px rgba(255, 157, 0, 0.8); }
+      50% { box-shadow: 0 0 50px rgba(255, 157, 0, 0.95); }
+    }
+
+    .orbit {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .orbit-1 { width: 120px; height: 120px; }
+    .orbit-2 { width: 180px; height: 180px; }
+    .orbit-3 { width: 240px; height: 240px; }
+    .orbit-4 { width: 300px; height: 300px; }
+    .orbit-5 { width: 390px; height: 390px; }
+    .orbit-6 { width: 460px; height: 460px; }
+    .orbit-7 { width: 520px; height: 520px; }
+    .orbit-8 { width: 580px; height: 580px; }
+
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      transform-origin: center;
+      cursor: pointer;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .mercury {
+      width: 10px;
+      height: 10px;
+      background-color: var(--mercury-color);
+      animation: orbit 4s linear infinite;
+    }
+
+    .venus {
+      width: 15px;
+      height: 15px;
+      background-color: var(--venus-color);
+      animation: orbit 10s linear infinite;
+    }
+
+    .earth {
+      width: 16px;
+      height: 16px;
+      background-color: var(--earth-color);
+      animation: orbit 16s linear infinite;
+    }
+
+    .mars {
+      width: 12px;
+      height: 12px;
+      background-color: var(--mars-color);
+      animation: orbit 30s linear infinite;
+    }
+
+    .jupiter {
+      width: 30px;
+      height: 30px;
+      background-color: var(--jupiter-color);
+      animation: orbit 60s linear infinite;
+    }
+
+    .saturn {
+      width: 25px;
+      height: 25px;
+      background-color: var(--saturn-color);
+      animation: orbit 90s linear infinite;
+    }
+
+    .saturn::after {
+      content: '';
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(244, 235, 211, 0.6);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(30deg);
+    }
+
+    .uranus {
+      width: 20px;
+      height: 20px;
+      background-color: var(--uranus-color);
+      animation: orbit 120s linear infinite;
+    }
+
+    .neptune {
+      width: 18px;
+      height: 18px;
+      background-color: var(--neptune-color);
+      animation: orbit 165s linear infinite;
+    }
+
+    .planet:hover {
+      box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.4);
+    }
+
+    @keyframes orbit {
+      0% { transform: rotate(0deg) translateX(60px) rotate(0deg); }
+      100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); }
+    }
+
+    .mercury { animation: orbit 4s linear infinite; }
+    .venus { animation: orbit 10s linear infinite; }
+    .earth { animation: orbit 16s linear infinite; }
+    .mars { animation: orbit 30s linear infinite; }
+    .jupiter { animation: orbit 60s linear infinite; }
+    .saturn { animation: orbit 90s linear infinite; }
+    .uranus { animation: orbit 120s linear infinite; }
+    .neptune { animation: orbit 165s linear infinite; }
+
+    /* Planet Sections */
+    .planet-section {
+      min-height: 100vh;
+      padding: 5rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .planet-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    .planet-visible {
+      animation: fade-up 1s ease forwards;
+    }
+
+    .planet-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .planet-title {
+      font-size: clamp(2rem, 8vw, 4rem);
+      position: relative;
+      display: inline-block;
+      opacity: 0;
+    }
+
+    .planet-title.visible {
+      animation: title-reveal 1.2s ease forwards;
+    }
+
+    .planet-subtitle {
+      color: var(--text-secondary);
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      margin-top: 0.5rem;
+      opacity: 0;
+    }
+
+    .planet-subtitle.visible {
+      animation: fade-in 1s ease 0.3s forwards;
+    }
+
+    .planet-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .planet-image {
+      position: relative;
+      width: 100%;
+      max-width: 300px;
+      aspect-ratio: 1/1;
+      margin: 0 auto;
+      opacity: 0;
+      transform: scale(0.8) translateY(20px);
+      will-change: transform, opacity;
+    }
+
+    .planet-image.visible {
+      animation: planet-reveal 1.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    .planet-image::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 40px currentColor;
+      opacity: 0.15;
+      z-index: -1;
+      animation: pulse 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 0.15; }
+      100% { transform: scale(1.1); opacity: 0.25; }
+    }
+
+    .planet-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      width: 100%;
+    }
+
+    .fact-card {
+      background: var(--ui-bg);
+      border: 1px solid var(--ui-border);
+      border-radius: 8px;
+      padding: 1rem;
+      flex: 1 1 200px;
+      max-width: 300px;
+      backdrop-filter: blur(10px);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      transform: translateY(30px);
+      opacity: 0;
+    }
+
+    .fact-card.visible {
+      animation: card-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .fact-card:nth-child(2).visible {
+      animation-delay: 0.1s;
+    }
+
+    .fact-card:nth-child(3).visible {
+      animation-delay: 0.2s;
+    }
+
+    .fact-card:nth-child(4).visible {
+      animation-delay: 0.3s;
+    }
+
+    .fact-label {
+      font-size: 0.9rem;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .fact-value {
+      font-size: 1.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .fact-value.countup {
+      counter-reset: count 0;
+      animation: countup 2s forwards;
+    }
+
+    .fact-unit {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    /* Sun-specific styles */
+    #sun .planet-image {
+      background: radial-gradient(circle at 30% 30%, 
+                                 #FFF176 0%, 
+                                 #FFD54F 25%, 
+                                 #FF9800 50%, 
+                                 #FF5722 75%);
+      box-shadow: 0 0 60px rgba(255, 157, 0, 0.6);
+      color: var(--sun-color);
+      animation-name: sun-rotate;
+      animation-duration: 100s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+
+    .sun-surface {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      opacity: 0.6;
+    }
+
+    .sun-flare {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 157, 0, 0) 0%,
+        rgba(255, 157, 0, 0.3) 50%,
+        rgba(255, 157, 0, 0) 100%
+      );
+      transform-origin: center;
+      animation: sun-flare 15s infinite linear;
+    }
+
+    @keyframes sun-flare {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes sun-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Mercury-specific styles */
+    #mercury .planet-image {
+      background: 
+        radial-gradient(circle at 70% 70%, 
+                      rgba(165, 169, 173, 0.9) 0%, 
+                      rgba(74, 76, 78, 0.8) 45%, 
+                      rgba(38, 39, 40, 1) 100%),
+        linear-gradient(45deg, #8c8c8c 0%, #52545C 100%);
+      color: var(--mercury-color);
+    }
+
+    /* Venus-specific styles */
+    #venus .planet-image {
+      background: 
+        radial-gradient(circle at 30% 30%, 
+                      rgba(242, 192, 145, 0.8) 0%, 
+                      rgba(224, 142, 85, 0.9) 45%, 
+                      rgba(161, 82, 25, 1) 100%),
+        linear-gradient(45deg, #F2C091 0%, #E08E55 100%);
+      color: var(--venus-color);
+    }
+
+    .venus-clouds {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      opacity: 0.4;
+    }
+
+    .venus-cloud {
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background: 
+        radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.8) 0%,
+          rgba(242, 192, 145, 0.2) 40%,
+          rgba(242, 192, 145, 0) 60%
+        );
+      animation: venus-clouds 20s infinite linear;
+    }
+
+    @keyframes venus-clouds {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Earth-specific styles */
+    #earth .planet-image {
+      background: linear-gradient(135deg, #137ED9 0%, #42AAF5 50%, #A6CFFF 100%);
+      color: var(--earth-color);
+    }
+
+    .earth-surface {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='100' viewBox='0 0 200 100'%3E%3Cpath fill='%2333a653' d='M55,15 C45,20 42,30 40,40 C35,55 35,60 30,70 C25,80 25,82 15,85 L15,100 L40,100 L60,90 L70,100 L110,100 L125,90 L135,100 L170,100 L170,70 L165,60 L160,50 L140,45 L145,40 L140,30 L130,25 L125,15 L115,20 L105,15 L90,20 L80,15 L70,20 L60,10 L55,15'/%3E%3C/svg%3E");
+      background-size: 400% 400%;
+      background-position: 0% 0%;
+      opacity: 0.8;
+      animation: earth-rotate 60s linear infinite;
+    }
+
+    @keyframes earth-rotate {
+      0% { background-position: 0% 0%; }
+      100% { background-position: -300% 0%; }
+    }
+
+    /* Mars-specific styles */
+    #mars .planet-image {
+      background: 
+        radial-gradient(circle at 30% 30%, 
+                      rgba(230, 127, 92, 0.8) 0%, 
+                      rgba(196, 77, 44, 0.9) 45%, 
+                      rgba(128, 51, 30, 1) 100%),
+        linear-gradient(45deg, #E67F5C 0%, #C44D2C 100%);
+      color: var(--mars-color);
+    }
+
+    .mars-surface {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      opacity: 0.6;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='20' cy='30' r='8' fill='%23C44D2C'/%3E%3Ccircle cx='70' cy='50' r='12' fill='%23C44D2C'/%3E%3Ccircle cx='40' cy='70' r='10' fill='%23C44D2C'/%3E%3C/svg%3E");
+      background-size: 100% 100%;
+      animation: mars-rotate 80s linear infinite;
+    }
+
+    @keyframes mars-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Jupiter-specific styles */
+    #jupiter .planet-image {
+      background: linear-gradient(135deg, #E0B589 0%, #CF9669 50%, #8B5E3C 100%);
+      color: var(--jupiter-color);
+    }
+
+    .jupiter-bands {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .jupiter-band {
+      position: absolute;
+      width: 100%;
+      height: 20%;
+      background: rgba(139, 94, 60, 0.4);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) inset;
+    }
+
+    .band-1 { top: 20%; }
+    .band-2 { top: 60%; }
+
+    .jupiter-spot {
+      position: absolute;
+      width: 25%;
+      height: 12%;
+      background: #CF4F4F;
+      border-radius: 50%;
+      top: 43%;
+      left: 60%;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3) inset;
+      transform: rotate(-10deg);
+    }
+
+    /* Saturn-specific styles */
+    #saturn .planet-image {
+      background: linear-gradient(135deg, #F4EBD3 0%, #E0D0A7 50%, #BFA976 100%);
+      color: var(--saturn-color);
+    }
+
+    .saturn-ring-container {
+      position: absolute;
+      width: 180%;
+      height: 180%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(75deg);
+      perspective: 1000px;
+    }
+
+    .saturn-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 20px solid rgba(244, 235, 211, 0.3);
+      top: 0;
+      left: 0;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .saturn-ring::before {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: 50%;
+      border: 5px solid rgba(244, 235, 211, 0.1);
+    }
+
+    .saturn-ring::after {
+      content: '';
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      border: 8px solid rgba(244, 235, 211, 0.2);
+    }
+
+    /* Uranus-specific styles */
+    #uranus .planet-image {
+      background: linear-gradient(135deg, #CAF0F8 0%, #90E0EF 50%, #00B4D8 100%);
+      color: var(--uranus-color);
+    }
+
+    .uranus-ring-container {
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotateX(85deg);
+    }
+
+    .uranus-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid rgba(202, 240, 248, 0.2);
+      top: 0;
+      left: 0;
+    }
+
+    /* Neptune-specific styles */
+    #neptune .planet-image {
+      background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 100%);
+      color: var(--neptune-color);
+    }
+
+    .neptune-storms {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      overflow: hidden;
+      transform-origin: center;
+      animation: neptune-rotate 100s linear infinite;
+    }
+
+    .neptune-storm {
+      position: absolute;
+      width: 40%;
+      height: 40%;
+      border-radius: 50%;
+      background: rgba(67, 97, 238, 0.8);
+      top: 30%;
+      left: 60%;
+    }
+
+    @keyframes neptune-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(7, 11, 36, 0.9);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal.active {
+      opacity: 1;
+      pointer-events: all;
+      animation: modal-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .modal-content {
+      background: var(--ui-bg);
+      border: 1px solid var(--ui-border);
+      border-radius: 12px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: scale(0.95);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .modal.active .modal-content {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--ui-border);
+    }
+
+    .modal-title {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 1.5rem;
+      padding: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: var(--accent-blue);
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .modal-section {
+      margin-bottom: 1rem;
+    }
+
+    .modal-section-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent-blue);
+    }
+
+    .modal-section-content {
+      line-height: 1.6;
+    }
+
+    .modal-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .modal-fact {
+      background: rgba(13, 17, 38, 0.5);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .modal-fact-label {
+      font-size: 0.8rem;
+      color: var(--accent-teal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+    }
+
+    .modal-fact-value {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    /* Animations */
+    @keyframes fade-in {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @keyframes fade-up {
+      0% { opacity: 0; transform: translateY(40px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fade-scale-in {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes text-reveal {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes title-reveal {
+      0% { opacity: 0; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+      100% { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+
+    @keyframes planet-reveal {
+      0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes card-reveal {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes modal-in {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes countup {
+      0% { content: "0"; }
+      100% { content: attr(data-value); }
+    }
+
+    @keyframes background-shift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 0%; }
+    }
+
+    /* Responsive Styling */
+    @media (min-width: 768px) {
+      .planet-container {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .planet-image {
+        max-width: 350px;
+      }
+
+      .planet-header {
+        grid-column: 1 / -1;
+      }
+
+      .nav-link {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .navigation {
+        padding: 0.5rem;
+      }
+
+      .nav-list {
+        gap: 0.5rem;
+      }
+
+      .nav-link {
+        padding: 0.3rem;
+        font-size: 0.75rem;
+      }
+
+      .planet-icon {
+        width: 8px;
+        height: 8px;
+      }
+
+      .orbital-simulation {
+        height: 350px;
+      }
+
+      .orbit-1 { width: 80px; height: 80px; }
+      .orbit-2 { width: 120px; height: 120px; }
+      .orbit-3 { width: 160px; height: 160px; }
+      .orbit-4 { width: 200px; height: 200px; }
+      .orbit-5 { width: 240px; height: 240px; }
+      .orbit-6 { width: 280px; height: 280px; }
+      .orbit-7 { width: 320px; height: 320px; }
+      .orbit-8 { width: 340px; height: 340px; }
+
+      .sun { width: 40px; height: 40px; }
+      .mercury { width: 6px; height: 6px; }
+      .venus { width: 10px; height: 10px; }
+      .earth { width: 10px; height: 10px; }
+      .mars { width: 8px; height: 8px; }
+      .jupiter { width: 20px; height: 20px; }
+      .saturn { width: 18px; height: 18px; }
+      .uranus { width: 14px; height: 14px; }
+      .neptune { width: 14px; height: 14px; }
+    }
+
+    /* For very small screens */
+    @media (max-width: 480px) {
+      .planet-section {
+        padding: 4rem 0.5rem;
+      }
+
+      .orbital-simulation {
+        height: 300px;
+      }
+
+      .orbit-8 { width: 280px; height: 280px; }
+    }
+  </style>
   <body>
-    <div id="root"></div>
-    <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
-    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Space Background -->
+    <div class="space-background">
+      <div class="stars"></div>
+      <div class="stars"></div>
+      <div class="stars"></div>
+      <div class="nebula"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#intro" class="nav-link active">Intro<span class="nav-indicator"></span></a>
+        </li>
+        <li class="nav-item">
+          <a href="#sun" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--sun-color);"></span>
+            Sun<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#mercury" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--mercury-color);"></span>
+            Mercury<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#venus" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--venus-color);"></span>
+            Venus<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#earth" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--earth-color);"></span>
+            Earth<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#mars" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--mars-color);"></span>
+            Mars<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#jupiter" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--jupiter-color);"></span>
+            Jupiter<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#saturn" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--saturn-color);"></span>
+            Saturn<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#uranus" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--uranus-color);"></span>
+            Uranus<span class="nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#neptune" class="nav-link">
+            <span class="planet-icon" style="background-color: var(--neptune-color);"></span>
+            Neptune<span class="nav-indicator"></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Introduction Section -->
+    <section id="intro" class="planet-section">
+      <div class="intro">
+        <h1>Solar System Spectacle</h1>
+        <p>Embark on an interstellar journey through our cosmic neighborhood, exploring the celestial bodies that orbit our Sun. Scroll to travel from the scorching core of our solar system to its frigid outer reaches.</p>
+        
+        <div class="orbital-simulation">
+          <div class="orbital-container">
+            <div class="sun"></div>
+            <div class="orbit orbit-1"></div>
+            <div class="orbit orbit-2"></div>
+            <div class="orbit orbit-3"></div>
+            <div class="orbit orbit-4"></div>
+            <div class="orbit orbit-5"></div>
+            <div class="orbit orbit-6"></div>
+            <div class="orbit orbit-7"></div>
+            <div class="orbit orbit-8"></div>
+            
+            <div class="planet mercury" style="transform: rotate(60deg) translateX(60px) rotate(-60deg);"></div>
+            <div class="planet venus" style="transform: rotate(120deg) translateX(90px) rotate(-120deg);"></div>
+            <div class="planet earth" style="transform: rotate(180deg) translateX(120px) rotate(-180deg);"></div>
+            <div class="planet mars" style="transform: rotate(240deg) translateX(150px) rotate(-240deg);"></div>
+            <div class="planet jupiter" style="transform: rotate(300deg) translateX(195px) rotate(-300deg);"></div>
+            <div class="planet saturn" style="transform: rotate(0deg) translateX(230px) rotate(0deg);"></div>
+            <div class="planet uranus" style="transform: rotate(60deg) translateX(260px) rotate(-60deg);"></div>
+            <div class="planet neptune" style="transform: rotate(120deg) translateX(290px) rotate(-120deg);"></div>
+          </div>
+        </div>
+
+        <div class="scroll-indicator">
+          <span>Scroll to Explore</span>
+          <div class="scroll-arrow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sun Section -->
+    <section id="sun" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">The Sun</h2>
+          <p class="planet-subtitle">The Star at the Center of Our Solar System</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--sun-color);">
+          <div class="sun-surface">
+            <div class="sun-flare"></div>
+          </div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="1,392,700">1,392,700</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Temperature</div>
+            <div class="fact-value" data-value="5,500">5,500</div>
+            <div class="fact-unit">°C (surface)</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Mass</div>
+            <div class="fact-value" data-value="333,000">333,000</div>
+            <div class="fact-unit">x Earth's mass</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Age</div>
+            <div class="fact-value" data-value="4.6">4.6</div>
+            <div class="fact-unit">billion years</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mercury Section -->
+    <section id="mercury" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Mercury</h2>
+          <p class="planet-subtitle">The Smallest and Innermost Planet</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--mercury-color);"></div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="4,880">4,880</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="58">58</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="88">88</div>
+            <div class="fact-unit">Earth days</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Temperature</div>
+            <div class="fact-value">-173° to 427°</div>
+            <div class="fact-unit">Celsius</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Venus Section -->
+    <section id="venus" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Venus</h2>
+          <p class="planet-subtitle">Earth's Toxic Twin</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--venus-color);">
+          <div class="venus-clouds">
+            <div class="venus-cloud"></div>
+          </div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="12,104">12,104</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="108">108</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="225">225</div>
+            <div class="fact-unit">Earth days</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Temperature</div>
+            <div class="fact-value" data-value="462">462</div>
+            <div class="fact-unit">°C (surface avg.)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Earth Section -->
+    <section id="earth" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Earth</h2>
+          <p class="planet-subtitle">Our Home in the Cosmos</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--earth-color);">
+          <div class="earth-surface"></div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="12,742">12,742</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="150">150</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="365.25">365.25</div>
+            <div class="fact-unit">days</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Moons</div>
+            <div class="fact-value" data-value="1">1</div>
+            <div class="fact-unit">(The Moon)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mars Section -->
+    <section id="mars" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Mars</h2>
+          <p class="planet-subtitle">The Red Planet</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--mars-color);">
+          <div class="mars-surface"></div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="6,779">6,779</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="228">228</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="687">687</div>
+            <div class="fact-unit">Earth days</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Moons</div>
+            <div class="fact-value" data-value="2">2</div>
+            <div class="fact-unit">(Phobos & Deimos)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Jupiter Section -->
+    <section id="jupiter" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Jupiter</h2>
+          <p class="planet-subtitle">The Largest Planet</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--jupiter-color);">
+          <div class="jupiter-bands">
+            <div class="jupiter-band band-1"></div>
+            <div class="jupiter-band band-2"></div>
+            <div class="jupiter-spot"></div>
+          </div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="139,820">139,820</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="778">778</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="11.86">11.86</div>
+            <div class="fact-unit">Earth years</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Moons</div>
+            <div class="fact-value" data-value="79+">79+</div>
+            <div class="fact-unit">known moons</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Saturn Section -->
+    <section id="saturn" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Saturn</h2>
+          <p class="planet-subtitle">The Ringed Wonder</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--saturn-color);">
+          <div class="saturn-ring-container">
+            <div class="saturn-ring"></div>
+          </div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="116,460">116,460</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="1,434">1,434</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="29.45">29.45</div>
+            <div class="fact-unit">Earth years</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Ring Span</div>
+            <div class="fact-value" data-value="282,000">282,000</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Uranus Section -->
+    <section id="uranus" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Uranus</h2>
+          <p class="planet-subtitle">The Sideways Planet</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--uranus-color);">
+          <div class="uranus-ring-container">
+            <div class="uranus-ring"></div>
+          </div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="50,724">50,724</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="2,871">2,871</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="84">84</div>
+            <div class="fact-unit">Earth years</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Axial Tilt</div>
+            <div class="fact-value" data-value="98">98</div>
+            <div class="fact-unit">degrees</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Neptune Section -->
+    <section id="neptune" class="planet-section">
+      <div class="planet-container">
+        <div class="planet-header">
+          <h2 class="planet-title">Neptune</h2>
+          <p class="planet-subtitle">The Windiest Planet</p>
+        </div>
+        
+        <div class="planet-image" style="color: var(--neptune-color);">
+          <div class="neptune-storms">
+            <div class="neptune-storm"></div>
+          </div>
+        </div>
+        
+        <div class="planet-info">
+          <div class="fact-card">
+            <div class="fact-label">Diameter</div>
+            <div class="fact-value" data-value="49,244">49,244</div>
+            <div class="fact-unit">kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Distance from Sun</div>
+            <div class="fact-value" data-value="4,495">4,495</div>
+            <div class="fact-unit">million kilometers</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Orbit Period</div>
+            <div class="fact-value" data-value="165">165</div>
+            <div class="fact-unit">Earth years</div>
+          </div>
+          <div class="fact-card">
+            <div class="fact-label">Wind Speed</div>
+            <div class="fact-value" data-value="2,100">2,100</div>
+            <div class="fact-unit">km/h</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal Template -->
+    <div class="modal" id="planetModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title" id="modalTitle">Planet Name</h3>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <!-- Content will be dynamically inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Handle scroll-based animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: "-100px"
+      };
+
+      // Observer for planet sections
+      const planetObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const section = entry.target;
+            section.querySelector('.planet-container')?.classList.add('planet-visible');
+            section.querySelector('.planet-title')?.classList.add('visible');
+            section.querySelector('.planet-subtitle')?.classList.add('visible');
+            section.querySelector('.planet-image')?.classList.add('visible');
+            
+            // Animate fact cards with delay
+            const cards = section.querySelectorAll('.fact-card');
+            cards.forEach((card, index) => {
+              setTimeout(() => {
+                card.classList.add('visible');
+              }, 300 + (index * 100));
+            });
+
+            // Update active navigation item
+            updateActiveNav(section.id);
+          }
+        });
+      }, observerOptions);
+
+      // Observe all planet sections
+      document.querySelectorAll('.planet-section').forEach(section => {
+        planetObserver.observe(section);
+      });
+
+      // Navigation active state handling
+      function updateActiveNav(sectionId) {
+        document.querySelectorAll('.nav-link').forEach(link => {
+          link.classList.remove('active');
+        });
+        const activeLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const targetSection = document.querySelector(targetId);
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // Parallax effect for space background
+      window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+        document.querySelector('.nebula').style.transform = `translate3d(0, ${scrollY * 0.05}px, 0)`;
+        document.querySelector('.stars').style.transform = `translate3d(0, ${scrollY * 0.02}px, 0)`;
+      });
+
+      // Planet Modal functionality
+      const modal = document.getElementById('planetModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalBody = document.getElementById('modalBody');
+      const closeBtn = document.querySelector('.modal-close');
+
+      // Planet data for modal
+      const planetData = {
+        sun: {
+          title: "The Sun",
+          description: "The Sun is the star at the center of our Solar System. It's a nearly perfect sphere of hot plasma, with internal convective motion that generates a magnetic field. The Sun's diameter is about 1.39 million kilometers, about 109 times that of Earth, and its mass is about 330,000 times that of Earth, accounting for about 99.86% of the total mass of the Solar System.",
+          facts: [
+            { label: "Classification", value: "G-type main-sequence star" },
+            { label: "Core Temperature", value: "15 million °C" },
+            { label: "Surface Gravity", value: "274 m/s²" },
+            { label: "Luminosity", value: "3.828 × 10^26 W" },
+            { label: "Rotation Period", value: "25-35 days" },
+            { label: "Estimated Lifespan", value: "10 billion years" }
+          ]
+        },
+        mercury: {
+          title: "Mercury",
+          description: "Mercury is the smallest and innermost planet in the Solar System. Its orbit around the Sun takes 87.97 Earth days, the shortest of all the planets in the Solar System. Mercury is not tidally locked with the Sun, but its rotational period is tidally coupled to its orbital period in a 3:2 resonance, meaning it rotates on its axis exactly three times for every two revolutions around the Sun.",
+          facts: [
+            { label: "Surface", value: "Rocky, heavily cratered" },
+            { label: "Atmosphere", value: "Minimal (trace amounts)" },
+            { label: "Day Length", value: "176 Earth days" },
+            { label: "Surface Gravity", value: "3.7 m/s²" },
+            { label: "Magnetic Field", value: "1% of Earth's" },
+            { label: "Closest to Sun", value: "47 million km" }
+          ]
+        },
+        venus: {
+          title: "Venus",
+          description: "Venus is the second planet from the Sun and is Earth's closest planetary neighbor. It's one of the four inner, terrestrial planets, and it's often called Earth's twin because it's similar in size and density. Venus rotates in the opposite direction to most other planets, meaning the Sun rises in the west and sets in the east. Its thick atmosphere traps heat in a runaway greenhouse effect, making it the hottest planet in our solar system.",
+          facts: [
+            { label: "Surface", value: "Volcanic plains, mountains" },
+            { label: "Atmosphere", value: "96% carbon dioxide" },
+            { label: "Day Length", value: "243 Earth days" },
+            { label: "Surface Gravity", value: "8.87 m/s²" },
+            { label: "Atmospheric Pressure", value: "92 times Earth's" },
+            { label: "Cloud Composition", value: "Sulfuric acid" }
+          ]
+        },
+        earth: {
+          title: "Earth",
+          description: "Earth is the third planet from the Sun and the only astronomical object known to harbor life. About 71% of the Earth's surface is covered with water. The Earth's outer layer is divided into several rigid tectonic plates that migrate across the surface over many millions of years. Earth interacts with other objects in space, especially the Sun and the Moon, which is Earth's only natural satellite.",
+          facts: [
+            { label: "Surface", value: "Oceans (71%), land (29%)" },
+            { label: "Atmosphere", value: "78% nitrogen, 21% oxygen" },
+            { label: "Day Length", value: "23.93 hours" },
+            { label: "Surface Gravity", value: "9.8 m/s²" },
+            { label: "Magnetic Field", value: "Active, dipolar" },
+            { label: "Biodiversity", value: "8.7 million species (est.)" }
+          ]
+        },
+        mars: {
+          title: "Mars",
+          description: "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System. It's often called the 'Red Planet' because of its reddish appearance due to iron oxide (rust) on its surface. Mars has two small moons, Phobos and Deimos. Mars has the largest volcano in the Solar System, Olympus Mons, and the largest canyon, Valles Marineris.",
+          facts: [
+            { label: "Surface", value: "Deserts, polar ice caps" },
+            { label: "Atmosphere", value: "96% carbon dioxide (thin)" },
+            { label: "Day Length", value: "24.6 hours" },
+            { label: "Surface Gravity", value: "3.72 m/s²" },
+            { label: "Dust Storms", value: "Can cover entire planet" },
+            { label: "Evidence of Water", value: "Ancient riverbeds, polar ice" }
+          ]
+        },
+        jupiter: {
+          title: "Jupiter",
+          description: "Jupiter is the fifth planet from the Sun and the largest in the Solar System. It's a gas giant with a mass one-thousandth that of the Sun, but two-and-a-half times the mass of all the other planets combined. Jupiter has a prominent system of bands and swirls, featuring the Great Red Spot, a giant storm that has been observed for over 350 years.",
+          facts: [
+            { label: "Composition", value: "Hydrogen (90%), helium (10%)" },
+            { label: "Atmosphere", value: "Ammonia crystals, storms" },
+            { label: "Day Length", value: "9.93 hours" },
+            { label: "Surface Gravity", value: "24.79 m/s²" },
+            { label: "Great Red Spot Size", value: "16,000 km wide" },
+            { label: "Magnetic Field", value: "14 times stronger than Earth's" }
+          ]
+        },
+        saturn: {
+          title: "Saturn",
+          description: "Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It's a gas giant with an average radius about nine times that of Earth. Saturn has a prominent ring system that consists of nine continuous main rings and three discontinuous arcs, composed mostly of ice particles with a smaller amount of rocky debris and dust.",
+          facts: [
+            { label: "Composition", value: "Hydrogen (96%), helium (3%)" },
+            { label: "Ring System", value: "7 major rings, thousands of ringlets" },
+            { label: "Day Length", value: "10.7 hours" },
+            { label: "Surface Gravity", value: "10.44 m/s²" },
+            { label: "Ring Thickness", value: "As thin as 10 meters" },
+            { label: "Density", value: "Less than water (would float)" }
+          ]
+        },
+        uranus: {
+          title: "Uranus",
+          description: "Uranus is the seventh planet from the Sun. It has the third-largest planetary radius and fourth-largest planetary mass in the Solar System. Uranus is similar in composition to Neptune, and both have bulk chemical compositions which differ from that of the larger gas giants Jupiter and Saturn. Uranus's atmosphere has a unique feature: it rotates at a nearly 90-degree angle from its orbital plane.",
+          facts: [
+            { label: "Composition", value: "Hydrogen, helium, methane (ice)" },
+            { label: "Ring System", value: "13 faint rings" },
+            { label: "Day Length", value: "17.24 hours" },
+            { label: "Surface Gravity", value: "8.69 m/s²" },
+            { label: "Color", value: "Pale blue (methane atmosphere)" },
+            { label: "Interior", value: "Mantle of water, ammonia, methane ice" }
+          ]
+        },
+        neptune: {
+          title: "Neptune",
+          description: "Neptune is the eighth and farthest-known planet from the Sun. It's the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet. Neptune is 17 times the mass of Earth, and slightly more massive than its near-twin Uranus. Neptune orbits the Sun once every 164.8 years. It has 14 known moons, the largest being Triton.",
+          facts: [
+            { label: "Composition", value: "Hydrogen, helium, methane ice" },
+            { label: "Ring System", value: "5 main rings" },
+            { label: "Day Length", value: "16.11 hours" },
+            { label: "Surface Gravity", value: "11.15 m/s²" },
+            { label: "Great Dark Spot", value: "Massive storm system" },
+            { label: "Discovery", value: "1846 (mathematical prediction)" }
+          ]
+        }
+      };
+
+      // Handle planet clicks in orbital simulation
+      document.querySelectorAll('.planet').forEach(planet => {
+        planet.addEventListener('click', () => {
+          const planetClass = Array.from(planet.classList).find(cls => 
+            ['sun', 'mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'].includes(cls)
+          );
+          
+          if (planetClass) {
+            openPlanetModal(planetClass);
+          }
+        });
+      });
+
+      // Handle planet image clicks
+      document.querySelectorAll('.planet-image').forEach(planetImg => {
+        planetImg.addEventListener('click', () => {
+          const section = planetImg.closest('section');
+          if (section && section.id) {
+            openPlanetModal(section.id);
+          }
+        });
+      });
+
+      // Open modal with planet data
+      function openPlanetModal(planetId) {
+        const data = planetData[planetId];
+        if (!data) return;
+        
+        modalTitle.textContent = data.title;
+        
+        // Build modal content
+        let content = `<div class="modal-section">
+          <p class="modal-section-content">${data.description}</p>
+        </div>`;
+        
+        content += `<div class="modal-section">
+          <h4 class="modal-section-title">Interesting Facts</h4>
+          <div class="modal-facts">`;
+        
+        data.facts.forEach(fact => {
+          content += `<div class="modal-fact">
+            <div class="modal-fact-label">${fact.label}</div>
+            <div class="modal-fact-value">${fact.value}</div>
+          </div>`;
+        });
+        
+        content += `</div></div>`;
+        
+        modalBody.innerHTML = content;
+        modal.classList.add('active');
+      }
+
+      // Close modal
+      closeBtn.addEventListener('click', () => {
+        modal.classList.remove('active');
+      });
+
+      // Close modal if clicked outside
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+
+      // Add parallax to planets on mousemove
+      document.querySelectorAll('.planet-image').forEach(planetEl => {
+        const parentSection = planetEl.closest('section');
+        parentSection.addEventListener('mousemove', (e) => {
+          const { left, top, width, height } = parentSection.getBoundingClientRect();
+          const x = (e.clientX - left) / width - 0.5;
+          const y = (e.clientY - top) / height - 0.5;
+          
+          planetEl.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
+        });
+        
+        parentSection.addEventListener('mouseleave', () => {
+          planetEl.style.transform = 'translate(0, 0)';
+        });
+      });
+
+      // Handle resize for responsive orbital view
+      function adjustOrbitalSimulation() {
+        const container = document.querySelector('.orbital-simulation');
+        if (!container) return;
+        
+        const orbital = document.querySelector('.orbital-container');
+        const width = container.offsetWidth;
+        const planets = document.querySelectorAll('.planet');
+        
+        // Adjust orbital paths for small screens
+        if (width < 500) {
+          planets.forEach(planet => {
+            const className = Array.from(planet.classList).find(cls => 
+              ['mercury', 'venus', 'earth', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune'].includes(cls)
+            );
+            
+            if (!className) return;
+            
+            // Adjust orbit distance based on screen size
+            let orbitFactor;
+            switch(className) {
+              case 'mercury': orbitFactor = 40; break;
+              case 'venus': orbitFactor = 60; break;
+              case 'earth': orbitFactor = 80; break;
+              case 'mars': orbitFactor = 100; break;
+              case 'jupiter': orbitFactor = 130; break;
+              case 'saturn': orbitFactor = 155; break;
+              case 'uranus': orbitFactor = 175; break;
+              case 'neptune': orbitFactor = 190; break;
+              default: orbitFactor = 40;
+            }
+            
+            // Update animation
+            const style = document.createElement('style');
+            style.textContent = `@keyframes orbit-${className} { 
+              0% { transform: rotate(0deg) translateX(${orbitFactor}px) rotate(0deg); } 
+              100% { transform: rotate(360deg) translateX(${orbitFactor}px) rotate(-360deg); }
+            }`;
+            document.head.appendChild(style);
+            
+            // Apply animation
+            planet.style.animation = `orbit-${className} ${getOrbitDuration(className)} linear infinite`;
+          });
+        }
+      }
+      
+      // Get orbital duration based on planet
+      function getOrbitDuration(planetName) {
+        switch(planetName) {
+          case 'mercury': return '4s';
+          case 'venus': return '10s';
+          case 'earth': return '16s';
+          case 'mars': return '30s';
+          case 'jupiter': return '60s';
+          case 'saturn': return '90s';
+          case 'uranus': return '120s';
+          case 'neptune': return '165s';
+          default: return '10s';
+        }
+      }
+      
+      // Run adjustments on load and resize
+      window.addEventListener('load', adjustOrbitalSimulation);
+      window.addEventListener('resize', adjustOrbitalSimulation);
+      
+      // Counter animation for fact values
+      function animateCounters() {
+        document.querySelectorAll('.fact-value[data-value]').forEach(counter => {
+          const value = counter.getAttribute('data-value');
+          if (!value) return;
+          
+          // Remove commas for numeric comparison
+          const numericValue = parseFloat(value.replace(/,/g, ''));
+          if (isNaN(numericValue)) return;
+          
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                let startValue = 0;
+                const duration = 1500;
+                const startTime = performance.now();
+                
+                function updateCounter(currentTime) {
+                  const elapsedTime = currentTime - startTime;
+                  if (elapsedTime < duration) {
+                    const progress = elapsedTime / duration;
+                    const currentValue = Math.floor(progress * numericValue);
+                    counter.textContent = currentValue.toLocaleString();
+                    requestAnimationFrame(updateCounter);
+                  } else {
+                    counter.textContent = value; // Set final value with original formatting
+                  }
+                }
+                
+                requestAnimationFrame(updateCounter);
+                observer.disconnect();
+              }
+            });
+          });
+          
+          observer.observe(counter);
+        });
+      }
+      
+      // Run counter animations when document is loaded
+      document.addEventListener('DOMContentLoaded', animateCounters);
+    </script>
   </body>
 </html>
